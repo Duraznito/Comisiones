@@ -1,0 +1,130 @@
+public with sharing class ComisionesPDFController {
+      
+      
+     public Opportunity oportunidad {get;set;}   
+     public String oportunidadId {get;set;}
+     
+     public List<Comision__c> lstComision {get;set;}
+     public List<Comision__c> lstComision2 {get;set;}
+    
+    public ComisionesPDFController(ApexPages.StandardController stdController){
+    
+    
+    Opportunity oportunidad= (Opportunity)stdController.getRecord();
+    oportunidadId = oportunidad.Id; 
+     
+     oportunidad = [
+                    SELECT 
+                        Id,
+                        Name,
+                        Importe_total_despu_s_del_descuento__c,
+                        Descuento_extraordinario_total__c,
+                        Opportunity.CreatedDate,Esquema__c,
+                        No_EnKontrol__c,
+                        Amount,
+                        OwnerId,
+                        Asesor_Externo_Original__c,
+                        Telefono_de_officina__c,
+                        Desarrollo__r.Razon_comercial__c,
+                        Desarrollo__r.Name,
+                        Name_cv__c,
+                        Digito_Verificador__c ,  
+                        Fecha_de_Separacion__c,
+                        Fecha_de_Venta__c,
+                        Fecha_de_Venta_MM_AA__c,
+                      
+                        Fecha_de_Escrituracion__c,
+                        Inmobiliaria__c,
+                        Inmobiliaria__r.name,
+                        Total_Adicionales__c,
+                        StageName,
+                        correo_pro__c,
+                        Tel_Propietario_Oportunidad__c,
+                        Casa__c,
+                        Referencia_Bancaria_Cliente_2__c,
+                        Account.Name,
+                        Account.Estado_civil__c,
+                        Account.Edad__c,
+                        Account.RFC__c,
+                        Account.Phone,
+                        Account.PersonMobilePhone,
+                        Account.PersonEmail,
+                        
+                        Account.Conyuge_o_Aval__c,
+                        Account.E_mail_Conyugue__c,
+                        Account.Nombre_Conyugue__c,
+                        
+                        Account.Nacionalidad__c,
+                        Account.BillingStreet,
+                        Account.Colonia__c,
+                        Account.BillingCity,
+                        Account.BillingState,
+                        Account.BillingPostalCode,
+                        Account.RecordType.Name
+                    FROM Opportunity
+                    WHERE Id =: oportunidadId 
+                ];
+        
+       
+lstComision = [
+                    SELECT Id,
+                     Name,
+                     Nombre__c,
+                     PCT_de_Comision__c,
+                     de_la_comisi_n_a_pagar__c,
+                     Comentarios__c,
+                     Comisi_n_Pagada__c,
+                     CreatedById,
+                     Factura_Periodo_Rel__c,
+                     Fecha_Pago_comision__c,
+                     Copy_Importe_Final_de_Venta__c,
+                     Monto_a_pagar_Com__c,
+                     Monto_de_comisi_n__c,                     
+                     Monto_pagado_Com__c,
+                     Oportunidad_rel__c,
+                     Opp_importe_final_de_venta__c,
+                     Orden_de_Compra__c,
+                     Pago_en__c,
+                     Saldo_por_pagar_Com__c,
+                     Usuario__r.name,
+                     Tipo_de_usuario__c,
+                     
+                     LastModifiedById
+                     
+                    FROM Comision__c 
+                    WHERE Tipo_de_usuario__c='Interno' AND Oportunidad_rel__c =:oportunidadId 
+                ];     
+                
+                
+           lstComision2 = [
+                    SELECT Id,
+                     Name,
+                     Nombre__c,
+                     PCT_de_Comision__c,
+                     de_la_comisi_n_a_pagar__c,
+                     Comentarios__c,
+                     Comisi_n_Pagada__c,
+                     CreatedById,
+                     Factura_Periodo_Rel__c,
+                     Fecha_Pago_comision__c,
+                     Copy_Importe_Final_de_Venta__c,
+                     Monto_a_pagar_Com__c,
+                     Monto_de_comisi_n__c,                     
+                     Monto_pagado_Com__c,
+                     Oportunidad_rel__c,
+                     Opp_importe_final_de_venta__c,
+                     Orden_de_Compra__c,
+                     Pago_en__c,
+                     Saldo_por_pagar_Com__c,
+                     Usuario__r.name,
+                     Tipo_de_usuario__c,
+                     
+                     LastModifiedById
+                     
+                    FROM Comision__c 
+                    WHERE Tipo_de_usuario__c='Externo' AND Oportunidad_rel__c =:oportunidadId 
+                ];  
+                
+                   
+}
+}

@@ -1,0 +1,15 @@
+@isTest
+public class ComisionesPDFController_test {
+    
+    @isTest static void controllerConstructor(){
+       
+        Comision__c comi = new Comision__c(Oportunidad_rel__c='0061Q00000m7greQAA');
+        insert comi;
+        
+        Opportunity nuevo = new Opportunity(Name='TPJ DMM', AccountId='00136000010oL5FAAU', Desarrollo__c='a0P3600000I3F8bEAF', LeadSource='Radio', CampaignId='701360000015omjAAA', Esquema__c='SHF', CloseDate=Date.newInstance(2008,11,20),StageName='Visitado');
+        insert nuevo;
+               
+        Apexpages.StandardController cm = new Apexpages.standardController(nuevo);        
+        ComisionesPDFController controller = new ComisionesPDFController(cm);
+    } 
+}

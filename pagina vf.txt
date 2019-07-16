@@ -1,0 +1,395 @@
+<apex:page standardController="Opportunity" extensions="ComisionesPDFController" renderAs="PDF" standardStylesheets="false" applyHtmlTag="false" showHeader="false" sidebar="false" docType="html-5.0">
+
+ <html>
+    <head>
+       <style>
+  .nohide{
+    min-height: 500px;
+
+  }
+  .header{
+    font-family: Arial Unicode MS;
+    font-size: small;
+    text-align: left;
+    z-index:3;
+  }
+  .content{
+    position: relative;
+    bottom: 150px;
+    font-family:  Arial Unicode MS;
+    font-size:small;
+    height: 430px;
+    max-width: 100%;
+    position: relative;
+    top: 150px;
+    width: 99%;
+  }
+ 
+
+  .col-50{
+    width: 49%;
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+  }
+  .col-70{
+    width: 69%;
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+  }
+  .col-30{
+    width: 29%;
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+  }
+  .col-33{
+    width: 33%;
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+  }
+  .logo{
+    width: 80%;
+    vertical-align: top;
+  }
+  .col-100{
+    width: 99%;
+    display: inline-block;
+    vertical-align: top;
+  }
+  ul{
+    list-style-type: none;
+  }
+  .table_1{
+    max-width: 100%;
+    width: 100%;
+    page-break-inside:auto;
+    margin-bottom: 15px;
+    font-family: Arial Unicode MS;
+  }
+  thead{
+    background: #BAAD40;
+    color: black;
+  }
+  h1{
+  font-family: Arial Unicode MS;
+  }
+  h2{
+  font-family: Arial Unicode MS;
+  }
+  .d3d3d3 {
+    background: #d3d3d3 ;
+  }
+  .textRight{
+    text-align: right;
+  }
+  .strong{
+    font-weight: bold;
+    font-family: Arial Unicode MS;
+  }
+
+  .pagenumber:before {
+    content: counter(page);
+  }
+  .pagecount:before {
+    content: counter(pages);
+  }
+   div.up{
+    padding: 8px;
+    position:absolute;
+    top:1px;
+    margin-top:-7px;
+    text-align: right;
+    font-family: Arial Unicode MS;
+   }
+  .footer {
+   position: fixed;
+   left: 0;
+   bottom: 0;
+   width: 100%;
+   text-align: right;
+   font-family: Arial Unicode MS;
+   font-size: small;
+   
+   table td
+   { padding: 0px;
+   margin: 0px;
+   font-family: Arial Unicode MS;
+   }
+}
+</style>
+  </head>
+  
+  
+  <body>
+  <apex:form >
+  
+  
+   <div class="header" >
+         <P ALIGN="Right"><apex:image value="{!$Resource.logov2}" width="160" /> </p>    
+             
+  </div>                  
+        
+  
+  <div class="up" >
+        <h3>
+           <strong> Estado de Comisiones</strong>
+        </h3>  
+           <p ALIGN="left" style="font-size: 8pt; margin-top:-10px; margin-bottom: 1em;">Fecha de Impresión:<apex:outputtext value="{0, date, dd/MM/yyyy}"><apex:param value="{!TODAY()}"></apex:param></apex:outputtext></p>
+            
+  </div>    
+  
+  
+  
+  <section>
+  <br />
+     <div>
+        <table width="100%">
+           
+           
+           <tr>
+             <td width="50%">
+                <strong>Datos de la vivienda</strong>
+             </td>
+             
+             <td width="50%">
+                <strong>Datos de la Oportunidad</strong>
+             </td>
+           </tr>
+           
+           <tr style="font-size: 9pt;">
+             <td VALIGN="TOP">
+               <b>Desarrollo: </b> {!Opportunity.Desarrollo__r.Name}               
+               <br />          
+               <b>Referencia de Casa:</b> {!opportunity.Referencia_de_casa__c}
+               <br />
+               <b>Prototipo:</b> {!opportunity.Casa__r.PrototipoLookUp__r.Name}             
+              </td>
+              
+              
+              <td>
+                 <b>Oportunidad: </b> {!Opportunity.Name}
+                 <br />
+                 <b>Fecha Creacion Op. </b>
+                 <apex:outputtext value="{0, date, dd/MM/yyyy}">
+                       <apex:param value="">
+                      </apex:param>
+                 </apex:outputtext> 
+                 <br />
+                 <b>Fecha Escrituración: </b>
+                 <apex:outputtext value="{0, date, dd/MM/yyyy}">
+                       <apex:param value="{!Opportunity.Fecha_de_Escrituracion__c}">
+                      </apex:param>
+                 </apex:outputtext> 
+                 <br />
+                 <b>Fecha venta: </b>
+                 <apex:outputtext value="{0, date, dd/MM/yyyy}">
+                       <apex:param value="{!Opportunity.Fecha_de_Venta__c}">
+                      </apex:param>
+                 </apex:outputtext> 
+                 <br />
+                  <b>Etapa: </b>{!Opportunity.StageName}
+                 <br />
+                 <b>Importe final de venta: </b> 
+                   <apex:outputText value="$ {0, number, ###, ###, ###, ## 0.00}">                   
+                      <apex:param value="{!Opportunity.Importe_total_despu_s_del_descuento__c}" />               
+                   </apex:outputText>﻿
+                 
+              </td>
+           </tr>
+           
+        </table>
+     </div>
+  </section>
+  
+  <seccion>
+           <div>
+             <strong>Comercializadora</strong>
+             
+              <table width="100%" border="0" style="font-size: 8pt; ">
+               <tbody>
+               <tr>
+                <th style="width:15px">Nombre</th>
+                <th style="width:15px">% de Comisión</th>
+                <th style="width:15px">$ monto de comision</th>
+                <th style="width:15px">Total a Pagar</th>
+                <th style="width:15px">Pagado a la Fecha</th>
+                <th style="width:15px">Faltante a pagar</th>
+                <th style="width:15px">Fecha pagada</th>
+                <th style="width:10px">Comisión pagada </th>
+               </tr>
+               <tr>              
+               <td>{!Opportunity.Casa__r.Comercializador__r.Name}</td>
+               <td>{!Opportunity.Casa__r.proc_Comision_prod__c}%</td>
+               <td><apex:outputText value="$ {0, number, ###, ###, ###, ## 0.00}"> <apex:param value="{!Opportunity.Casa__r.Monto_Comision__c}" /></apex:outputText>﻿</td>
+               <td><apex:outputText value="$ {0, number, ###, ###, ###, ## 0.00}"> <apex:param value="{!Opportunity.Casa__r.Comision_Total_a_Pagar__c}" /></apex:outputText></td>   
+               <td><apex:outputText value="$ {0, number, ###, ###, ###, ## 0.00}"> <apex:param value="{!Opportunity.Casa__r.Total_Pagado_a_la_Fecha__c}" /></apex:outputText></td>   
+               <td><apex:outputText value="$ {0, number, ###, ###, ###, ## 0.00}"> <apex:param value="{!Opportunity.Casa__r.Faltante_a_pagar__c}" /></apex:outputText></td>   
+               <td><apex:outputText value="{0, date, dd/MM/yyyy}"> <apex:param value="{!Opportunity.Casa__r.Fecha_pago__c}" /></apex:outputText></td>   
+              
+               <td align="center">
+                 <apex:outputPanel rendered="{!AND(Opportunity.Casa__r.Pagado__c= true)}">
+                      <b>   <apex:image value="{!$Resource.D_boton_true}" width="10" height="12" /></b> 
+                 </apex:outputPanel>
+                                    
+                 <apex:outputPanel rendered="{!AND(Opportunity.Casa__r.Pagado__c = false)}">
+                       <b>   <apex:image value="{!$Resource.D_boton_false}" width="10" height="12" /></b> 
+                 </apex:outputPanel>
+               </td>
+              </tr>
+         </tbody>
+       </table>
+           </div>
+  </seccion>
+  
+  
+  
+  <section>
+     <div>
+     <br />
+         <strong>Comisiones Internas</strong>
+        
+        <table width="100%" border="0" style="font-size: 8pt; ">
+         <tbody>
+             <tr>
+                <th style="width:15px">Nombre</th>
+                <th style="width:10px">% de Comisión</th>
+                <th style="width:15px">$ monto de Comisión</th>
+                <th style="width:15px">Total a Pagar</th>
+                <th style="width:15px">Pagada a la fecha</th>
+                <th style="width:15px">Faltante a pagar</th>
+                <th style="width:15px">Fecha pagada</th>
+                <th style="width:15px">Comisión pagada </th>
+            </tr>
+            
+            
+                <apex:repeat value="{!lstComision }" var="comi">
+                 <tr>  
+                     <td>{!comi.Nombre__c}</td>
+                     <td>{!comi.PCT_de_Comision__c}%</td>
+                     <td><apex:outputText value="$ {0, number, ###, ###, ###, ## 0.00}"><apex:param value="{!comi.Monto_de_comisi_n__c}" /></apex:outputText>﻿</td>
+                     <td><apex:outputText value="$ {0, number, ###, ###, ###, ## 0.00}"><apex:param value="{!comi.Monto_a_pagar_Com__c}" /></apex:outputText>﻿</td>
+                     
+                     <td><apex:outputText value="$ {0, number, ###, ###, ###, ## 0.00}"><apex:param value="{!comi.Monto_pagado_Com__c}" /></apex:outputText>﻿</td> 
+                     <td><apex:outputText value="$ {0, number, ###, ###, ###, ## 0.00}"><apex:param value="{!comi.Saldo_por_pagar_Com__c}" /></apex:outputText>﻿</td>               
+                     <td><apex:outputText value="{0, date, dd/MM/yyyy}"> <apex:param value="{!comi.Fecha_Pago_comision__c}" /></apex:outputText></td>
+                     
+                     <td align="center">
+                        <apex:outputPanel rendered="{!AND(comi.Comisi_n_Pagada__c= true)}">
+                                 <b>   <apex:image value="{!$Resource.D_boton_true}" width="10" height="12" /></b> 
+                        </apex:outputPanel>
+                                    
+                        <apex:outputPanel rendered="{!AND(comi.Comisi_n_Pagada__c = false)}">
+                                 <b>   <apex:image value="{!$Resource.D_boton_false}" width="10" height="12" /></b> 
+                        </apex:outputPanel>
+                     </td>
+                </tr>
+              </apex:repeat>
+         </tbody>
+       </table>
+     
+     </div>
+  </section>
+  
+  <section>
+    <br />
+     <div>
+         <strong>Comisiones Externas</strong>
+        
+        <table width="100%" border="0" style="font-size: 8pt; ">
+         <tbody>
+             <tr>
+                <th style="width:15px">Nombre</th>
+                <th style="width:10px">% de Comisión</th>
+                <th style="width:15px">$ monto de Comisión</th>
+                <th style="width:15px">Total a Pagar</th>
+                <th style="width:15px">Pagada a la fecha</th>
+                <th style="width:15px">Faltante a pagar</th>
+                <th style="width:15px">Fecha pagada</th>
+                <th style="width:15px">Comisión pagada </th>
+            </tr>
+            
+            
+                <apex:repeat value="{!lstComision2 }" var="comis">
+                 <tr>  
+                     <td>{!comis.Nombre__c}</td>
+                     <td>{!comis.PCT_de_Comision__c}%</td>
+                     <td><apex:outputText value="$ {0, number, ###, ###, ###, ## 0.00}"><apex:param value="{!comis.Monto_de_comisi_n__c}" /></apex:outputText>﻿</td>
+                     <td><apex:outputText value="$ {0, number, ###, ###, ###, ## 0.00}"><apex:param value="{!comis.Monto_a_pagar_Com__c}" /></apex:outputText>﻿</td>
+                     
+                     <td><apex:outputText value="$ {0, number, ###, ###, ###, ## 0.00}"><apex:param value="{!comis.Monto_pagado_Com__c}" /></apex:outputText>﻿</td> 
+                     <td><apex:outputText value="$ {0, number, ###, ###, ###, ## 0.00}"><apex:param value="{!comis.Saldo_por_pagar_Com__c}" /></apex:outputText>﻿</td>               
+                     <td><apex:outputText value="{0, date, dd/MM/yyyy}"> <apex:param value="{!comis.Fecha_Pago_comision__c}" /></apex:outputText></td>
+                     
+                     <td align="center">
+                        <apex:outputPanel rendered="{!AND(comis.Comisi_n_Pagada__c= true)}">
+                                 <b>   <apex:image value="{!$Resource.D_boton_true}" width="10" height="12" /></b> 
+                        </apex:outputPanel>
+                                    
+                        <apex:outputPanel rendered="{!AND(comis.Comisi_n_Pagada__c = false)}">
+                                 <b>   <apex:image value="{!$Resource.D_boton_false}" width="10" height="12" /></b> 
+                        </apex:outputPanel>
+                     </td>
+                </tr>
+              </apex:repeat>
+         </tbody>
+       </table>
+     
+     </div>
+  </section>
+  
+  <section>
+    <br />
+     <div>
+         <strong>Resumen Comisiones</strong>
+        
+        <table width="100%" border="0" style="font-size: 8pt; ">
+         <tbody>
+             <tr>
+                <th style="width:15px">ID</th>
+                <th style="width:15px">Name</th>
+                <th style="width:15px">Usuario</th>
+                <th style="width:15px">% de comision</th>
+                <th style="width:15px">$ monto de comision</th>
+                <th style="width:15px">$ Monto pagado</th>
+                <th style="width:15px">Fecha pagada</th>
+                <th style="width:15px">Comision pagada </th>
+            </tr>
+            <tr>
+               <td>&nbsp;</td>
+               <td>&nbsp;</td>
+               <td>&nbsp;</td>
+               <td>&nbsp;</td>
+               <td>&nbsp;</td>
+               <td>&nbsp;</td>   
+               <td>&nbsp;</td>
+           </tr>
+         </tbody>
+       </table>
+     
+     </div>
+  </section>
+  
+  
+  
+<div class="footer">
+  <div class="textRight">
+    La consulta y uso de los datos mostrados en éste documento deben considerarse únicamente para efectos informativos.
+    Pag.
+    <span class="pagenumber">
+    </span>
+    de
+    <span class="pagecount">
+    </span>
+  </div>
+  
+</div>
+  
+  
+  
+   </apex:form>
+  </body>
+ </html>
+</apex:page>
